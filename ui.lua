@@ -140,12 +140,10 @@ end)
 local LibName = tostring(math.random(1, 100))..tostring(math.random(1,50))..tostring(math.random(1, 100))
 
 function Kavo:ToggleUI()
-    if game:GetService("CoreGui")[LibName].Enabled or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")[LibName].Enabled then
-        local chk = game:GetService("CoreGui")[LibName].Enabled or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")[LibName].Enabled;
-        chk = false
+    if LibUi.Enabled then
+        LibUi.Enabled = false
     else
-        local chk = game:GetService("CoreGui")[LibName].Enabled or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")[LibName].Enabled;
-        chk = true
+        LibUi.Enabled = true
     end
 end
 
@@ -189,7 +187,7 @@ function Kavo.CreateLib(kavName, themeList)
     local selectedTab 
     kavName = kavName or "Library"
     table.insert(Kavo, kavName)
-    for i,v in pairs(game.CoreGui:GetChildren()) do
+    for i,v in pairs(game:GetService("CoreGui"):GetChildren() or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):GetChildren()) do
         if v:IsA("ScreenGui") and v.Name == kavName then
             v:Destroy()
         end
@@ -225,6 +223,7 @@ function Kavo.CreateLib(kavName, themeList)
     blurFrame.ZIndex = 999
 
     ScreenGui.Parent = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui");
+    getgenv().LibUi = ScreenGui.Parent;
     ScreenGui.Name = LibName
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     ScreenGui.ResetOnSpawn = false
